@@ -1,0 +1,2 @@
+# hi3536_kernel
+Hi3536 V100R001C02SPC060_Hi3536_SDK_V2.0.6.0_linux-3.10.y
