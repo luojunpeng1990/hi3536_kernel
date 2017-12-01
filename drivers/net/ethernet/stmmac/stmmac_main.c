@@ -48,6 +48,7 @@
 #include "dwmac_dma.h"
 #include "dwmac1000.h"
 #include "tnkhw_regmap.h"
+#include <linux/phy_fixed.h>
 
 #ifdef CONFIG_ARCH_HI3536
 #include "tnk_hi3536.h"
@@ -98,7 +99,6 @@ unsigned int stmmac_irq_num[] = {
 static void __iomem *stmmac_base_ioaddr;
 void __iomem *syscfg_base_ioaddr;
 
-#undef STMMAC_DEBUG
 /*#define STMMAC_DEBUG*/
 #ifdef STMMAC_DEBUG
 #define DBG(nlevel, klevel, fmt, args...) \
@@ -541,8 +541,14 @@ static int stmmac_init_phy(struct net_device *dev)
 	snprintf(bus_id, MII_BUS_ID_SIZE, "%x", priv->plat->bus_id);
 	snprintf(phy_id, MII_BUS_ID_SIZE + 3, PHY_ID_FMT, bus_id,
 		 priv->phy_addr);
-	pr_debug("stmmac_init_phy:  trying to attach to %s\n", phy_id);
 
+	if (priv->phy_addr == 0x5) {
+		snprintf(phy_id, MII_BUS_ID_SIZE + 3, PHY_ID_FMT,
+			"fixed-0", priv->phy_addr);
+	}
+
+	pr_debug("stmmac_init_phy:  trying to attach to %s\n", phy_id);
+	pr_info("#### %d\n", priv->phy_interface);
 	phydev = phy_connect(dev, phy_id, &stmmac_adjust_link,
 			     priv->phy_interface);
 
@@ -2407,8 +2413,8 @@ static int stmmacphy_dvr_remove(struct platform_device *pdev)
 
 static struct platform_driver stmmacphy_driver = {
 	.driver = {
-		   .name = PHY_RESOURCE_NAME,
-		   },
+		.name = PHY_RESOURCE_NAME,
+ 	},
 	.probe = stmmacphy_dvr_probe,
 	.remove = stmmacphy_dvr_remove,
 };
@@ -3203,6 +3209,12 @@ static struct plat_stmmacphy_data stmmac_phy_private_data[] = {
 #endif
 };
 
+static struct fixed_phy_status stmmac0_fixed_phy_status = {
+	.link = 1,
+	.speed = 1000,
+	.duplex = 1,
+};
+
 static struct platform_device stmmac_phy_devices = {
 	.name = "stmmacphy",
 	.id = 1,
@@ -3283,7 +3295,8 @@ static int __init stmmac_init_module(void)
 	/*  TODO - check return values */
 	ret = platform_device_register(&stmmac_phy_devices);
 	ret = platform_device_register(&stmmac_platform_device);
-
+	fixed_phy_add(PHY_POLL, 0x05, &stmmac0_fixed_phy_status);
+	pr_info("### Add fixed PHY \n");
 	if (platform_driver_register(&stmmacphy_driver)) {
 		pr_err("No PHY devices registered!\n");
 		return -ENODEV;

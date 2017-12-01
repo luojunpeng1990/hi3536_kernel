@@ -30,6 +30,8 @@
 
 #include "stmmac.h"
 
+#define  DEBUG
+
 #ifdef CONFIG_ARCH_HI3536
 #include "tnk_hi3536.h"
 #else

@@ -227,7 +227,7 @@ static int __init fixed_mdio_bus_init(void)
 	fmb->mii_bus->read = &fixed_mdio_read;
 	fmb->mii_bus->write = &fixed_mdio_write;
 	fmb->mii_bus->irq = fmb->irqs;
-
+pr_info("wERWRWREWERW\n");
 	ret = mdiobus_register(fmb->mii_bus);
 	if (ret)
 		goto err_mdiobus_alloc;
@@ -241,7 +241,7 @@ err_mdiobus_reg:
 err_pdev:
 	return ret;
 }
-module_init(fixed_mdio_bus_init);
+late_initcall(fixed_mdio_bus_init);
 
 static void __exit fixed_mdio_bus_exit(void)
 {

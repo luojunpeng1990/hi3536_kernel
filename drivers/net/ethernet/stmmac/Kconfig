@@ -230,3 +230,5 @@ config MAC1_PHY_RESET_GPIO_DATA
 	  0 means gpio output 0--1--0
 
 endif
+
+

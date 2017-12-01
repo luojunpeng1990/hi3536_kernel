@@ -335,6 +335,7 @@ struct phy_device *get_phy_device(struct mii_bus *bus, int addr, bool is_c45)
 	int r;
 
 	r = get_phy_id(bus, addr, &phy_id, is_c45, &c45_ids);
+	pr_info("get_phy_device %d, %d\n", addr, r);
 	if (r)
 		return ERR_PTR(r);
 

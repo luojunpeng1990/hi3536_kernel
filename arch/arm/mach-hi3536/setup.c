@@ -11,7 +11,7 @@
 #include <linux/stddef.h>
 #include <linux/compiler.h>
 #include <asm/setup.h>
-
+#include <asm/string.h>
 static char boot_sdkversion[64] = "0.0.0.0";
 
 /*****************************************************************************/

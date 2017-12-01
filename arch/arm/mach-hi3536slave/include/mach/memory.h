@@ -4,7 +4,8 @@
 /*
  * Physical DRAM offset.
  */
-#define PLAT_PHYS_OFFSET	UL(0x80000000)	/* for hi3536 A7 */
+/* #define PLAT_PHYS_OFFSET	UL(0x80000000)	/* for hi3536 A7 */
+#define PLAT_PHYS_OFFSET	UL(0xa0000000)	/* for hi3536 A7 */
 
 /* ddr max size */
 #define PLAT_PHYS_END		UL(0xFFFFFFFF)
